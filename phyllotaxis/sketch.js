@@ -1,5 +1,5 @@
-/*************
-	Phyllotaxis
+/***************
+	Phyllotaxis  WIP
 	************/
 // Global variables
 const angle = 137.5		/* divergence angle */
