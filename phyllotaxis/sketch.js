@@ -1,5 +1,5 @@
 /***************
-	Phyllotaxis  WIP
+	Phyllotaxis
 	************/
 // Global variables
 const angle = 137.5		/* divergence angle */
@@ -28,7 +28,7 @@ function draw() {
 		const y = r * sin(phi)
 		var hu = sin(start + i * 0.5)
 		hu = map(hu, -1, 1, 0, 360)
-		fill(hu, 255, 255)
+		fill(n % 256, hu % 256, 256)
 		noStroke()
 		ellipse(x, y, 4, 4)
 	}
