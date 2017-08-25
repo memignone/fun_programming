@@ -6,3 +6,6 @@ video: https://youtu.be/f0lkz2gSsIk
 
 # Processing
 http://processingjs.org/
+
+# Examples
+http://paulbourke.net/fractals/lorenz/

@@ -1,54 +1,47 @@
 /********************
-	Lorenz Attractor  NOT WORKING
+	Lorenz Attractor
+	not tested in 3D
 	*****************/
 
 // Initial values
-x = 0.1
-y = 0
-z = 0
+let x = 0.1
+let y = 0
+let z = 0
+const dt = 0.01
 
 // Lorenz's original values
-sigma = 10
-ro = 28
-beta = 8.0 / 3.0
+const sigma = 10
+const ro = 28
+const beta = 8.0 / 3.0
 
-// Save drawn point 
-points = new Array()
+const points = []
 
 function setup() {
-	createCanvas(800, 600, WEBGL)
+	createCanvas(800, 600)
 	colorMode(HSB)
+	background(0)
 }
 
 function draw() {
-	dt = 0.01
-	dx = (sigma * (y - x)) * dt
-	dy = (x * (ro - z) - y) * dt
-	dz = (x * y - beta * z) * dt
+	const dx = (sigma * (y - x)) * dt
+	const dy = (x * (ro - z) - y) * dt
+	const dz = (x * y - beta * z) * dt
 	x = x + dx
 	y = y + dy
  	z = z + dz
 
 	points.push(createVector(x, y, z))
 
-	background(0)
 	translate(width / 2, height / 2, 0)
-	scale(5)
-	stroke(255)
-	//noFill()
-	//ellipse(x, y, z, 2)
-	// hu = 0
-	// beginShape()
-	points.map(v => {
-		ellipse(v.x, v.y, v.z)
+	scale(3)
+	noFill()
+	
+	let hu = 0
+	beginShape()
+	points.map(p => {
+		stroke(hu % 256, 255, 255)
+		vertex(p.x, p.y)
+		hu += 0.1
 	})
-	// for (v in points) {
-	// 	stroke(hu, 255, 255)
-		// vertex(v.x, v.y, v.z)
-	// 	hu += 0.1
-	// 	if (hu > 255) {
-	// 		hu = 0
-	// 	}
-	// }
-	// endShape()
+	endShape()
 }
