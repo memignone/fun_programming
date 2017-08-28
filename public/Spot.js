@@ -10,10 +10,10 @@ function Spot(i, j) {
 	this.h = 0	// Result of the heuristic that estimates the cost of the cheapest path from n to the goal.
 
 	// Neighbors
-	this.neighbors = []
+	this.neighbors = new Array()
 
 	// Where did I come from?
-	this.previous = undefined
+	this.previous
 
 	// Am I a wall?
 	this.is_wall = random(1) < 0.4
@@ -33,8 +33,8 @@ Spot.prototype.show = function(color) {
     
 // Figure out who my neighbors are
 Spot.prototype.addNeighbors = function(grid) {
-	let i = this.i
-	let j = this.j
+	const i = this.i
+	const j = this.j
 	if (i < cols - 1) {
 		this.neighbors.push(grid[i + 1][j])
 	}

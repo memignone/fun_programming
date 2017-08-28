@@ -6,14 +6,14 @@
 const cols = 50		// grid's amount of columns
 const rows = 50		// grid's amount of rows
 const grid = new Array(cols)
-const openSet = []	// The set of currently discovered nodes that are not evaluated yet.
-const closedSet = []	// The set of nodes already evaluated
+const openSet = new Set()	// The set of currently discovered nodes that are not evaluated yet.
+const closedSet = new Set()	// The set of nodes already evaluated
 let start	// staring spot
 let end	// end spot
 let w	// width of each cell of the grid
 let h	// height of each cell of the grid
 let path	// The road taken
-  
+
 
 // An educated guess of how far it is between two points
 function heuristic(a, b) {
@@ -55,21 +55,21 @@ function setup() {
 	end.is_wall = false
 
 	// openSet starts with the starting-point only
-	openSet.push(start)
+	openSet.add(start)
 }
 
 function draw() {
 	// Am I still searching?
-	if (openSet.length > 0) {	
+	if (openSet.size) {	
 		// Best next option
-		let bestIndex = 0
-		for (let i = 0; i < openSet.length; i++) {
-			if (openSet[i].f < openSet[bestIndex].f) {
-				bestIndex = i
+		let best
+		openSet.forEach(spot => {
+			if (!best || spot.f < best.f) {
+				best = spot
 			}
-		}
-		var current = openSet[bestIndex]
-	
+		})
+		var current = best
+		
 		// Did I finish?
 		if (current === end) {
 			noLoop()
@@ -77,8 +77,8 @@ function draw() {
 		}
 	
 		// Best option moves from openSet to closedSet
-		openSet.splice(bestIndex, 1)
-		closedSet.push(current)
+		openSet.delete(current)
+		closedSet.add(current)
 	
 		// Check all the neighbors
 		const neighbors = current.neighbors
@@ -86,12 +86,12 @@ function draw() {
 			const neighbor = neighbors[i]
 
 			// Valid next spot?
-			if (!closedSet.includes(neighbor) && !neighbor.is_wall) {
+			if (!closedSet.has(neighbor) && !neighbor.is_wall) {
 				const tempG = current.g + heuristic(neighbor, current)
 
 				// Is this a better path than before?
 				let newPath = false
-				if (openSet.includes(neighbor)) {
+				if (openSet.has(neighbor)) {
 					if (tempG < neighbor.g) {
 						neighbor.g = tempG
 						newPath = true
@@ -99,7 +99,7 @@ function draw() {
 				} else {
 					neighbor.g = tempG
 					newPath = true
-					openSet.push(neighbor)
+					openSet.add(neighbor)
 				}
 
 				// Yes, it's a better path
@@ -126,13 +126,10 @@ function draw() {
 		}
 	}
 
-	for (let i = 0; i < closedSet.length; i++) {
-		closedSet[i].show(color(255, 0, 0, 50))
-	}
-
-	for (let i = 0; i < openSet.length; i++) {
-		openSet[i].show(color(0, 255, 0, 50))
-	}
+	// Show every closed spot on RED
+	closedSet.forEach(spot => { spot.show(color(255, 0, 0, 50)) })
+	// Show every open spot on GREEN
+	openSet.forEach(spot => { spot.show(color(0, 255, 0, 50)) })
 	
 	// Find the path by working backwards
 	path = []
