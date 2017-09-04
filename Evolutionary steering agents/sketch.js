@@ -1,7 +1,8 @@
 /********************************
 	Evolutionary steering agents
 	****************************/
-
+// TODO: implement Levì Flight for searching for food far from them.
+// TODO: place the food pieces on an image's bright spots would be a cool implementation
 // Global variables
 const agents = new Set()
 const food = new Set()
@@ -34,13 +35,11 @@ function setup() {
 
 	// Creation of the starting set of food pieces
 	for (let i = 0; i < initial_pieces.food; i++) {
-		// TODO: place the food pieces on an image's bright spots would be a cool implementation
 		food.add(createVector(random(width), random(height)))
 	}
 
 	// Creation of the starting set of poison pieces
 	for (var i = 0; i < initial_pieces.poison; i++) {
-		// TODO: place the poison pieces on an image's dark spots would be a cool implementation
 		poison.add(createVector(random(width), random(height)))
 	}
 	

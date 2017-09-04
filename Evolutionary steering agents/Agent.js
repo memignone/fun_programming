@@ -80,18 +80,18 @@ class Agent {
 		return new Agent(random(width), random(height), this.dna)
 	}
 
-	eat(eatable, hvalue, perception) {	// hvalue is the health increment/decrement
-		let record = Infinity	// Let's start with a huge record numeber
+	eat(eatable, h_delta, perception) {	// h_delta is amount the health increments/decrements
+		let minimum_distance = Infinity	// Let's start with a huge minimum_distance number
 		let closest
-		eatable.forEach(i => {
-			const distance = p5.Vector.dist(i, this.position)	// going through all the food pieces finding our which one is the closest one
-			// if a vehicle stumble upon food or poison even by chance or because it's cheasing it, he's gonna eat that piece
+		eatable.forEach(piece => {
+			const distance = p5.Vector.dist(piece, this.position)	// going through all the food pieces finding our which one is the closest one
+			// if an agent stumbles upon food or poison even by chance or because it's cheasing it, he's gonna eat that piece
 			if (distance < this.maxspeed) {	// I use maxspeed correspondent value to prevent agent "jumping" the food/poison piece
-				eatable.delete(i)
-				this.health += hvalue
-			} else if (distance < record && distance < perception) {	// this is going to be true only if distance is also within my agent's perception of Food/Poison
-				record = distance // our new record
-				closest = i		// the closest item form the set is now this piece of food
+				eatable.delete(piece)
+				this.health += h_delta
+			} else if (distance < minimum_distance && distance < perception) {	// this is going to be true only if distance is also within my agent's perception of Food/Poison
+				minimum_distance = distance	// The new minimum_distance
+				closest = piece		// The closest item form the set is now this piece of food
 			}	
 		})
 		if (closest) {
@@ -123,7 +123,7 @@ class Agent {
 		const angle = this.velocity.heading() + HALF_PI	// https://p5js.org/reference/#/p5.Vector/heading
 
 		// Color based on health
-		let colour = lerpColor(color('red'), color('green'), this.health)	// https://p5js.org/reference/#/p5/lerpColor
+		const colour = lerpColor(color('red'), color('green'), this.health)	// https://p5js.org/reference/#/p5/lerpColor
 		const alphy = lerp(50, 100, this.health)	// https://p5js.org/reference/#/p5/lerp
 
 		fill(colour)
@@ -151,7 +151,7 @@ class Agent {
 		pop()
 	}
 
-	update() {	// Method to update location		
+	update() {	// Method to update agent's location		
 		this.velocity.add(this.acceleration)	// Update velocity
 		this.velocity.limit(this.maxspeed)	// Limit speed
 		this.position.add(this.velocity)
